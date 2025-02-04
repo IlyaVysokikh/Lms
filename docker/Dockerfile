@@ -1,4 +1,25 @@
-FROM ubuntu:latest
-LABEL authors="Илья"
+FROM python:3.13-slim as builder
 
-ENTRYPOINT ["top", "-b"]
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    POETRY_VERSION=2.0.1
+
+WORKDIR /app
+
+RUN pip install "poetry==$POETRY_VERSION"
+
+COPY ../pyproject.toml ../poetry.lock ./
+
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi --no-root --only main
+
+FROM python:3.13-slim
+
+WORKDIR /app
+
+COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY ../src ./src
+
+CMD ["uvicorn", "src.web.main:app", "--host", "0.0.0.0", "--port", "8000"]
