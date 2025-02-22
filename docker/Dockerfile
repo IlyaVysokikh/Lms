@@ -21,7 +21,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 COPY ../internal ./internal
 COPY ../configs ./configs
-COPY ../cmd ./cmd
+COPY ../entrypoint ./cmd
 
 ENV PYTHONPATH="/app"
 
