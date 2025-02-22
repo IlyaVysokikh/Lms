@@ -9,7 +9,6 @@ WORKDIR /app
 RUN pip install "poetry==$POETRY_VERSION"
 
 COPY ../pyproject.toml ../poetry.lock ./
-
 RUN poetry config virtualenvs.create false && \
     poetry install --no-interaction --no-ansi --no-root --only main
 
@@ -20,6 +19,10 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.13/site-packages /usr/local/lib/python3.13/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-COPY ../src ./src
+COPY ../internal ./internal
+COPY ../configs ./configs
+COPY ../cmd ./cmd
 
-CMD ["uvicorn", "src.web.main:app", "--host", "0.0.0.0", "--port", "8000"]
+ENV PYTHONPATH="/app"
+
+CMD ["uvicorn", "cmd.main:app", "--host", "0.0.0.0", "--port", "8000"]

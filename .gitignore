@@ -173,4 +173,4 @@ cython_debug/
 .idea
 
 # env file
-src/web/config/.env
+internal/web/config/.env

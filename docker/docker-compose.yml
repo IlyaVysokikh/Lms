@@ -13,15 +13,13 @@ services:
       - POSTGRES_SERVER=postgres
       - POSTGRES_DB=app_db
       - REDIS_URL=redis://redis:6379/0
-      - NATS_URL=nats://nats:4222
     ports:
       - "8000:8000"
     volumes:
-      - ../src:/app/src
+      - ../internal:/internal/internal
     depends_on:
       - postgres
       - redis
-      - nats
     networks:
       - backend
 
@@ -60,17 +58,6 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
-
-  nats:
-    image: nats:2.9-alpine
-    container_name: nats_server
-    restart: unless-stopped
-    networks:
-      - backend
-    ports:
-      - "4222:4222"
-      - "8222:8222"
-    command: "-js"
 
 volumes:
   postgres_data:
