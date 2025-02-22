@@ -16,6 +16,26 @@ router = APIRouter(prefix="/api/v1/identity", tags=["identity"])
     summary="Login user",
     description="Endpoint to login user.",
     responses={
+        200: {
+            "description": "Successful login",
+            "model": TokenPairSchema
+        },
+        400: {
+            "description": "Password mismatch",
+            "content": {
+                "application/json": {
+                    "example": {"message": "Password does not match."}
+                }
+            }
+        },
+        404: {
+            "description": "User not found",
+            "content": {
+                "application/json": {
+                    "example": {"message": "User not found."}
+                }
+            }
+        }
     }
 )
 async def register_user(

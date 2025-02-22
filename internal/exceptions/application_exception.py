@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 
-from fastapi import HTTPException
-
 
 @dataclass
-class ApplicationException(HTTPException):
+class ApplicationException(Exception):
     @property
     def message(self):
         return "Application Exception occurred"
