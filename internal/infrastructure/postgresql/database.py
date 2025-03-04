@@ -2,6 +2,8 @@ from contextlib import contextmanager
 from typing import Generator
 import psycopg2
 from psycopg2 import errors
+from psycopg2.extras import RealDictCursor
+
 
 
 class Database:
@@ -14,8 +16,8 @@ class Database:
         Контекстный менеджер для получения курсора базы данных.
         :return: Генератор, возвращающий курсор базы данных.
         """
-        with self.__get_connection__(self._url) as conn:
-            cursor = conn.cursor()
+        with self.__get_connection__() as conn:
+            cursor = conn.cursor(cursor_factory=RealDictCursor)
             try:
                 yield cursor
                 conn.commit()

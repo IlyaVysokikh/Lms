@@ -4,21 +4,15 @@ from datetime import datetime, timedelta
 import bcrypt
 import jwt
 
-from configs.settings import Settings
+from configs.settings import AuthSettings
 from internal.handlers.identity.schema.token_pair_schema import TokenPairSchema
 from internal.infrastructure.postgresql.repositories.token_repository import TokenRepository
-from internal.infrastructure.postgresql.repositories.user_repository import UserRepository
-from internal.models.identity.user import User
 
 
 @dataclass
 class AuthService:
-    user_repository: UserRepository
     token_repository: TokenRepository
-    settings: Settings
-
-    def find_user_by_username(self, email: str) -> User | None:
-        return self.user_repository.find_user_by_email(email)
+    settings: AuthSettings
 
     def verify_password(self, plain_password: str, hashed_password) -> bool:
         plain_password_bytes = plain_password.encode("utf-8")
@@ -63,6 +57,9 @@ class AuthService:
             active: bool = True
     ) -> None:
         self.token_repository.save(refresh_token, expires_at, user_oid, active)
+
+    def hash_password(self, password: str) -> bytes:
+        return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
     def __create_access_token__(self, user_oid: int, email: str) -> str:
         payload = {
