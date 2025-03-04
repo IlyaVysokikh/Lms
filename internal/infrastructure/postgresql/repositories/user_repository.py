@@ -42,3 +42,7 @@ class UserRepository:
         return False
 
     def verify_user(self, email: str) -> bool:
+        query = "update t_user set c_verificated=true where c_email='{}'".format(email)
+
+        with self.db.get_cursor() as cursor:
+            cursor.execute(query)

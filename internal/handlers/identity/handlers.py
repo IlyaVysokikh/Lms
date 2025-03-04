@@ -100,7 +100,7 @@ async def register_user_handler(
 
 
 @router.get(
-    "verify",
+    "/verify",
     summary="Verify user email",
     description="Endpoint to verify user email.",
     responses={
