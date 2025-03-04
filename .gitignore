@@ -36,7 +36,7 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
+# Unit tests / coverage reports
 htmlcov/
 .tox/
 .nox/
@@ -173,4 +173,4 @@ cython_debug/
 .idea
 
 # env file
-src/web/config/.env
+internal/web/config/.env
